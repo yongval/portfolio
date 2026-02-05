@@ -17,27 +17,15 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // * RAIN
-    // Detect if device has touch capability
+    //* Detect if device has touch capability
     const isTouchDevice = () => {
         return (('ontouchstart' in window) ||
             (navigator.maxTouchPoints > 0) ||
             (navigator.msMaxTouchPoints > 0));
     };
 
-    if (!isTouchDevice()) { // Mouse Device
-        //* Rain Follow Cursor
-        const rainLines = document.querySelectorAll('.rain-line');
-        initRainFollowCursor(rainLines);
-
-            rainLines.forEach((line) => {
-            line.addEventListener('click', () => {
-                window.location.href = 'project.html';
-            });
-        });
-    }
-    else{ //* Touch Device
-        
+    // Disable the hover effect on rains
+    if (isTouchDevice()) { 
         const rainLines = document.querySelectorAll('.rain-line');
         let selectedLine = null;
 
@@ -61,19 +49,46 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         });
-
-        //* Mobile Menu in Touch Device
-        const menuIcon = document.querySelector(".mobile-menu-icon");
-        const openIcon = document.querySelector('.icon-open');
-        const closeIcon = document.querySelector('.icon-close');
-        const menu = document.querySelector(".mobile-menu");
-
-        menuIcon.addEventListener('click', () => {
-            const isOpen = menu.classList.toggle("is-open");
-            openIcon.classList.toggle("icon-hide", isOpen);
-            closeIcon.classList.toggle("icon-hide", !isOpen);
-        });
     }
+
+    //* Resonsive max-width: 800px ==> Rains follow cursorY & Menu icon
+    const mq = window.matchMedia("(max-width: 800px)");
+    const rainLines = document.querySelectorAll(".rain-line");
+
+    function updateRain() {
+        if (mq.matches) {
+            // Rains follow cursorY if width < 800px
+            initRainFollowCursorVertical(rainLines);
+
+            // Changing menu icon
+            const menuIcon = document.querySelector(".mobile-menu-icon");
+            const openIcon = document.querySelector('.icon-open');
+            const closeIcon = document.querySelector('.icon-close');
+            const menu = document.querySelector(".mobile-menu");
+
+            menuIcon.addEventListener('click', () => {
+                const isOpen = menu.classList.toggle("is-open");
+                openIcon.classList.toggle("icon-hide", isOpen);
+                closeIcon.classList.toggle("icon-hide", !isOpen);
+            });
+        } else {
+            // Rains follow cursorX if width > 800px
+            initRainFollowCursor(rainLines);
+        }
+    }
+    // run at start
+    updateRain();
+
+    // run whenever width crosses 600px
+    mq.addEventListener("change", updateRain);
+
+    // click handler (only once)
+    rainLines.forEach((line) => {
+    line.addEventListener("click", () => {
+        window.location.href = "project.html";
+    });
+    });
+        
 
     //* Scroll to top button
     const scrollContainer = document.querySelector("main");
@@ -110,6 +125,40 @@ document.addEventListener("DOMContentLoaded", function() {
     // Trigger the scroll event initially to check visibility on page load
     $(window).trigger('scroll');
 
+
+    // Dark mode when night
+    const hour = new Date().getHours();
+    let period;
+
+    if (hour >= 6 && hour < 18) {
+        period = "day";
+    } else {
+        period = "night";
+    }
+
+    const root = document.documentElement;
+    if (period == "day") {
+        root.style.setProperty("--main-clr", "#F5FBFF");
+        root.style.setProperty("--scnd-clr", "#BFCAD1");
+        root.style.setProperty("--dark-clr", "#2F2F2F");
+    } 
+    if (period == "night") {
+        root.style.setProperty("--main-clr", "#2F2F2F");
+        root.style.setProperty("--scnd-clr", "#5b5f62");
+        root.style.setProperty("--dark-clr", "#F5FBFF");
+
+        const zoomBackground = document.querySelector(".zoom");
+        if(zoomBackground){
+            zoomBackground.style.backgroundColor = "#2f2f2fa1";
+        }
+
+        const koreanName = document.querySelector("#korean-name");
+        if(koreanName){
+            koreanName.style.color = "var(--dark-clr)";
+        }
+
+        document.querySelector("body").style.fontWeight = "300";
+    } 
 });
 
 //** FUNCTIONS EXTERNES
@@ -125,6 +174,25 @@ function initRainFollowCursor(rainLines) {
         // Calculate angle based on horizontal cursor position only
         const horizontalPos = (mouseX - centerX) / (window.innerWidth / 2); // -1 to 1
         let angle = -(horizontalPos * 45); // Rotate between -135deg to -45deg
+
+        // Apply same rotation to all rain lines
+        rainLines.forEach((line) => {
+            line.style.rotate = angle + 'deg';
+        });
+    });
+}
+
+// Rain vertical
+function initRainFollowCursorVertical(rainLines) {
+    document.addEventListener('mousemove', (e) => {
+        const mouseY = e.clientY;
+
+        // Get center of screen
+        const centerY = window.innerHeight / 2;
+
+        // Calculate angle based on horizontal cursor position only
+        const verticalPos = (mouseY - centerY) / (window.innerHeight / 2); // -1 to 1
+        let angle = -(verticalPos * 45); // Rotate between -135deg to -45deg
 
         // Apply same rotation to all rain lines
         rainLines.forEach((line) => {

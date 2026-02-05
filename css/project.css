@@ -85,12 +85,12 @@ h2{
     z-index: 1001;
 }
 
-.zoom-exit svg path {
+.zoom-exit svg {
     stroke: var(--dark-clr);
     stroke-width: 2px;
 }
 
-.zoom-exit:hover svg path {
+.zoom-exit:hover svg {
     stroke: var(--scnd-clr);
     transition: stroke 0.3s;
 }
@@ -115,6 +115,7 @@ h2{
 .zoom-arrow-left svg path,
 .zoom-arrow-right svg path {
     stroke-width: 2px;
+    stroke: var(--dark-clr);
 }
 
 .zoom-arrow-left:hover svg path,
