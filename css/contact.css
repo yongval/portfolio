@@ -45,6 +45,9 @@ main{
 
 /* Small Screen (mobile)*/
 @media (max-width: 600px) {
+    body, main{
+        overflow-y: auto;
+    }
     .contact-top{
         flex-direction: column-reverse;
         gap: 20px;

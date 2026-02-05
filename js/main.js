@@ -69,18 +69,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const menu = document.querySelector(".mobile-menu");
 
         menuIcon.addEventListener('click', () => {
-            console.log('Menu icon clicked');
-            const isOpen = !openIcon.classList.contains('icon-hide');
-            console.log('Menu is open:', isOpen);
-            if (isOpen) {
-                menu.style.visibility = 'visible';
-                openIcon.classList.add('icon-hide');
-                closeIcon.classList.remove('icon-hide');
-            } else {
-                menu.style.visibility = 'hidden';
-                openIcon.classList.remove('icon-hide');
-                closeIcon.classList.add('icon-hide');
-            }
+            const isOpen = menu.classList.toggle("is-open");
+            openIcon.classList.toggle("icon-hide", isOpen);
+            closeIcon.classList.toggle("icon-hide", !isOpen);
         });
     }
 

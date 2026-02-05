@@ -79,11 +79,6 @@ main{
     margin-bottom: 40px;
 }    
 
-/* p{
-    font-family: "Public Sans";
-    font-size: 15px;
-} */
-
 hr.line-break {
     border: 0;
     height: 1px;
@@ -161,6 +156,9 @@ hr.line-break {
     hr.line-break {
         margin-top: 30px;
         margin-bottom: 30px;
+    }
+    .mobile-menu a{
+        font-weight: 500;
     }
 }
 

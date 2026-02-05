@@ -253,7 +253,22 @@ main::-webkit-scrollbar {
     padding: var(--header-margin);
     padding-top: 52px;
 
-    visibility: hidden;
+    /* animation setup */
+    transform-origin: top;
+    transform: scaleY(0);
+    opacity: 0;
+    pointer-events: none;
+
+    transition: transform 380ms cubic-bezier(.2,.8,.2,1), opacity 350ms ease;
+    will-change: transform, opacity;
+
+}
+
+/* Open state */
+.mobile-menu.is-open{
+    transform: scaleY(1);
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .mobile-menu a{
